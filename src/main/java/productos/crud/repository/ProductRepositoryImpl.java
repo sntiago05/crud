@@ -42,7 +42,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Optional<Producto> findById(Long a) {
+    public Optional<Producto> findById(Long a) throws SQLException {
         try (
                 PreparedStatement pst = conn.prepareStatement("select * Productos where id =?")) {
             try {
@@ -52,38 +52,32 @@ public class ProductRepositoryImpl implements ProductRepository {
                 throw new RuntimeException(e);
             }
 
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public List<Optional<Producto>> findAll() {
+    public List<Producto> findAll() throws SQLException {
         try (Statement st = conn.createStatement()) {
             ResultSet rs = st.executeQuery("select * from Productos");
-            List<Optional<Producto>> productos = new ArrayList<>();
+            List<Producto> productos = new ArrayList<>();
             while (rs.next()) {
-                productos.add(mapProduct(rs));
+                productos.add(mapProductCurrentRow(rs));
             }
             return productos;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean delete(Long id) throws SQLException {
         try (PreparedStatement pst = conn.prepareStatement("delete from Productos where id = ?")) {
             pst.setLong(1, id);
             int rows = pst.executeUpdate();
             return rows > 0;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
     @Override
-    public Boolean save(Producto entity) {
+    public Boolean save(Producto entity) throws SQLException {
         try (
                 PreparedStatement pst = conn.prepareStatement("insert into Productos (name,price,stock) VALUES (?,?,?)")) {
             pst.setString(1, entity.getName());
@@ -91,8 +85,26 @@ public class ProductRepositoryImpl implements ProductRepository {
             pst.setInt(3, entity.getStock());
             int rows = pst.executeUpdate();
             return rows > 1;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Boolean update(Producto entity) throws SQLException {
+        String sql = "UPDATE Productos SET stock = ? WHERE id = ?";
+        try (PreparedStatement pst = this.conn.prepareStatement(sql)) {
+            pst.setInt(1, entity.getStock());
+            pst.setLong(2, entity.getId());
+            int rows = pst.executeUpdate();
+            return rows > 0;
+        }
+    }
+
+    private static Producto mapProductCurrentRow(ResultSet rs) throws SQLException {
+        Producto producto = new Producto();
+        producto.setName(rs.getString("name"));
+        producto.setId(rs.getLong("id"));
+        producto.setStock(rs.getInt("stock"));
+        producto.setPrice(rs.getBigDecimal("price"));
+        return producto;
     }
 }

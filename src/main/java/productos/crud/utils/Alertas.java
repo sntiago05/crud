@@ -13,7 +13,7 @@ public class Alertas {
     private static void aplicarEstilo(DialogPane dialogPane, String claseCss) {
         try {
             dialogPane.getStylesheets().add(
-                    Alertas.class.getResource("/productos/crud/alertas.css").toExternalForm()
+                    Alertas.class.getResource("src/main/productos/crud/alertas.css").toExternalForm()
             );
             dialogPane.getStyleClass().add(claseCss);
         } catch (Exception e) {
@@ -38,6 +38,7 @@ public class Alertas {
         aplicarEstilo(alert.getDialogPane(), "alerta-error");
         alert.showAndWait();
     }
+
 
     public static void mostrarAdvertencia(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.WARNING);

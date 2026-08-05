@@ -22,16 +22,20 @@ public class ProductoService {
         return repo.findByName(name);
     }
 
-    public Optional<Producto> findById(Long id) {
+    public Optional<Producto> findById(Long id) throws SQLException {
         return repo.findById(id);
     }
 
-    public List<Optional<Producto>> findAll() {
+    public List<Producto> findAll() throws SQLException {
         return repo.findAll();
     }
 
-    public Boolean delete(Long id) {
+    public Boolean delete(Long id) throws SQLException {
         return repo.delete(id);
+    }
+
+    public Boolean update(Producto producto) throws SQLException {
+        return repo.update(producto);
     }
 
     public Boolean save(Producto producto) throws SQLException {
