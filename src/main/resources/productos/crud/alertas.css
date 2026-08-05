@@ -1,0 +1,28 @@
+.alerta-info > .header-panel,
+.alerta-confirmacion > .header-panel {
+    -fx-background-color: #2b6cb0;
+}
+
+.alerta-error > .header-panel {
+    -fx-background-color: #c53030;
+}
+
+.alerta-warning > .header-panel {
+    -fx-background-color: #dd6b20;
+}
+
+.alerta-info .header-panel .label,
+.alerta-error .header-panel .label,
+.alerta-warning .header-panel .label,
+.alerta-confirmacion .header-panel .label {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.dialog-pane {
+    -fx-font-size: 13px;
+}
+
+.dialog-pane .button {
+    -fx-cursor: hand;
+}
